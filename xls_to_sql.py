@@ -3,19 +3,17 @@ import db_info
 import pandas as pd
 
 
-# try:
-#     with psycopg2.connect(
-#         host=db_info.host,
-#         user=db_info.user,
-#         password=db_info.password,
-#         database=db_info.database
-#     ) as connection:
-#         connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-#         create_db_query = 'CREATE DATABASE IF NOT EXISTS foucault'
-#         with connection.cursor() as cursor:
-#             cursor.execute(create_db_query)
-# except Exception:
-#     print('Creation is failed. ')
+try:
+    connection = psycopg2.connect(
+        host=db_info.host,
+        user=db_info.user,
+        password=db_info.password
+    )
+    create_db_query = 'CREATE DATABASE IF NOT EXISTS foucault'
+    with connection.cursor() as cursor:
+        cursor.execute(create_db_query) # Выдает ошибку psycopg2.errors.ActiveSqlTransaction: CREATE TABLESPACE 
+except:                                 # cannot run inside a transaction block
+    print('DB creation is failed. ')
 
 
 table = psycopg2.connect(
