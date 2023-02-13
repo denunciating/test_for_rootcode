@@ -45,4 +45,5 @@ def animate(frame):
 
 
 anim = FuncAnimation(fig, animate, frames=8640, interval=1)
+# anim.save('video.mp4')
 plt.show()
