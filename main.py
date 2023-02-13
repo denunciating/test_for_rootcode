@@ -8,9 +8,9 @@ table = psycopg2.connect(
     host=db_info.host,
     user=db_info.user,
     password=db_info.password,
-    database=db_info.database
+    database='foucault'
 )
-select = f'SELECT * FROM foucault'
+select = f'SELECT * FROM foucault_consts'
 with table.cursor() as cursor:
     cursor.execute(select)
     result = cursor.fetchall()
@@ -30,6 +30,9 @@ line = lines[0]
 plt.axis('scaled')
 plt.xlim(-0.7, 0.7)
 plt.ylim(-0.7, 0.7)
+plt.title('Маятник Фуко')
+plt.xlabel('x')
+plt.ylabel('y')
 
 x = list()
 y = list()
