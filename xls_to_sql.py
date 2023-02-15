@@ -1,5 +1,6 @@
 import psycopg2
 import db_info
+import numpy as np
 import pandas as pd
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
@@ -26,23 +27,21 @@ table = psycopg2.connect(
 )
 drop_table_query = 'DROP TABLE IF EXISTS foucault_consts'
 create_table_query = 'CREATE TABLE IF NOT EXISTS foucault_consts(' \
-                     'g NUMERIC(7,3) NOT NULL,' \
-                     'L NUMERIC(7,3) NOT NULL,' \
-                     'init_x NUMERIC(5,3) NOT NULL,' \
-                     'init_y NUMERIC(5,3),' \
-                     'init_xdot NUMERIC(5,3),' \
-                     'init_ydot NUMERIC(5,3),' \
-                     'omega NUMERIC(17,12) NOT NULL,' \
-                     'lambda NUMERIC(17,12) NOT NULL);'
+                     'g FLOAT NOT NULL,' \
+                     'L FLOAT NOT NULL,' \
+                     'init_x FLOAT NOT NULL,' \
+                     'init_y FLOAT,' \
+                     'init_xdot FLOAT,' \
+                     'init_ydot FLOAT,' \
+                     'omega FLOAT NOT NULL,' \
+                     'lambda FLOAT NOT NULL);'
 
 insert_query = 'INSERT INTO foucault_consts(g, L, init_x, init_y, init_xdot, ' \
                'init_ydot, omega, lambda) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)'
 
 file = 'data.xlsx'
 xl = pd.read_excel(file)
-args = (xl['g'][0], xl['L'][0], xl['init_x'][0], xl['init_y'][0],
-             xl['init_xdot'][0], xl['init_ydot'][0],
-             xl['omega'][0], xl['lambda'][0])
+args = tuple([np.float64(xl[header][0]) for header in xl])
 
 with table.cursor() as cursor:
     cursor.execute(drop_table_query)
